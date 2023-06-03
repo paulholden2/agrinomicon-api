@@ -34,4 +34,6 @@ config :logger, level: :warning
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
 
-import_config "test.secret.exs"
+config :agrinomicon, Agrinomicon.Guardian,
+  issuer: "agrinomicon",
+  secret_key: "not_a_secret"

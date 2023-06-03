@@ -67,4 +67,6 @@ config :phoenix, :plug_init_mode, :runtime
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
 
-import_config "dev.secret.exs"
+config :agrinomicon, Agrinomicon.Guardian,
+  issuer: "agrinomicon",
+  secret_key: "not_a_secret"
