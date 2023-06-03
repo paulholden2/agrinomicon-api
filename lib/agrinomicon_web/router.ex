@@ -2,7 +2,7 @@ defmodule AgrinomiconWeb.Router do
   use AgrinomiconWeb, :router
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug :accepts, ["json", "geojson"]
     plug AgrinomiconWeb.Authentication
   end
 
