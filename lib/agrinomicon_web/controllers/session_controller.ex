@@ -8,7 +8,8 @@ defmodule AgrinomiconWeb.SessionController do
   def create(conn, %{"session" => session_params}) do
     with %Iam.User{} = user <- Iam.get_user_by_email(session_params["email"]),
          true <- Bcrypt.verify_pass(session_params["password"], user.password_hash),
-         {:ok, jwt, _claims} <- Agrinomicon.Guardian.encode_and_sign(user, %{}, token_type: :user),
+         {:ok, jwt, _claims} <-
+           Agrinomicon.Guardian.encode_and_sign(user, %{}, token_type: :user),
          {:ok, session} <- Iam.create_session(%{token: jwt, user_id: user.id}) do
       conn
       |> put_status(:created)

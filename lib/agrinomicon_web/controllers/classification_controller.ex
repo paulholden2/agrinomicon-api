@@ -7,7 +7,8 @@ defmodule AgrinomiconWeb.ClassificationController do
   action_fallback AgrinomiconWeb.FallbackController
 
   def index(conn, _params) do
-    with :ok <- Bodyguard.permit(Taxonomy.Policy, :list_classifications, conn.assigns[:current_user]) do
+    with :ok <-
+           Bodyguard.permit(Taxonomy.Policy, :list_classifications, conn.assigns[:current_user]) do
       classifications = Taxonomy.list_classifications()
       render(conn, :index, classifications: classifications)
     else

@@ -5,6 +5,7 @@ defmodule AgrinomiconWeb.FeatureGEOJSONTest do
 
   test "renders single feature" do
     feature = feature_fixture()
+
     assert AgrinomiconWeb.FeatureGEOJSON.show(%{feature: feature})
            |> Jason.encode!()
            |> Jason.decode!()
@@ -13,6 +14,7 @@ defmodule AgrinomiconWeb.FeatureGEOJSONTest do
 
   test "renders list of feature" do
     feature = feature_fixture()
+
     assert AgrinomiconWeb.FeatureGEOJSON.index(%{features: [feature, feature]})
            |> Jason.encode!()
            |> Jason.decode!()
