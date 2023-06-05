@@ -4,6 +4,6 @@ defmodule AgrinomiconWeb.CORS do
     allow_credentials: true,
     max_age: 600
 
-  resource("/api/*", origins: "*")
+  resource("/api/*", origins: "*", allow_headers: ["Content-Type"])
   resource("/graphql", origins: "*", allow_headers: ["Content-Type"])
 end

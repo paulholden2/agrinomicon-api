@@ -4,6 +4,7 @@ defmodule Agrinomicon.Gis do
   """
 
   import Ecto.Query, warn: false
+  import Geo.PostGIS
   alias Agrinomicon.Repo
 
   alias Agrinomicon.Gis.Feature
@@ -33,6 +34,12 @@ defmodule Agrinomicon.Gis do
   """
   def list_features do
     Repo.all(Feature)
+  end
+
+  def list_intersecting_features(wkt) do
+    intersector = Geo.WKT.decode!(wkt)
+    query = from feature in Feature, where: st_intersects(feature.geometry, ^intersector)
+    query |> Repo.all()
   end
 
   @doc """

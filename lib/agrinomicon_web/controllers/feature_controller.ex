@@ -6,7 +6,21 @@ defmodule AgrinomiconWeb.FeatureController do
 
   action_fallback AgrinomiconWeb.FallbackController
 
-  def index(conn, _params) do
+  def index(conn, %{"ne" => ne, "sw" => sw}) do
+    with regex <- ~r/(-?\d{1,3}[\.,]\d{1,7})[\s,](-?\d{1,3}\.\d{1,7})/,
+         [_, ne_lng, ne_lat] <- Regex.run(regex, ne),
+         [_, sw_lng, sw_lat] <- Regex.run(regex, sw) do
+      wkt =
+        "POLYGON ((#{ne_lng} #{ne_lat}, #{ne_lng} #{sw_lat}, #{sw_lng} #{sw_lat}, #{sw_lng} #{ne_lat}, #{ne_lng} #{ne_lat}))"
+
+      features = Gis.list_intersecting_features(wkt)
+      render(conn, :index, features: features)
+    else
+      _ -> index(conn, %{})
+    end
+  end
+
+  def index(conn, %{}) do
     features = Gis.list_features()
     render(conn, :index, features: features)
   end

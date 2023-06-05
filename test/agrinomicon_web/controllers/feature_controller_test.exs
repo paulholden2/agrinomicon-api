@@ -28,6 +28,32 @@ defmodule AgrinomiconWeb.FeatureControllerTest do
       conn = get(conn, ~p"/api/features")
       assert json_response(conn, 200)["data"] == []
     end
+
+    test "lists features within bounding box", %{conn: conn} do
+      ne = "-119.083496 35.259802"
+      sw = "-119.089804 35.256431"
+
+      inside =
+        feature_fixture(
+          geometry:
+            Geo.JSON.decode(
+              Jason.decode!('{"coordinates":[-119.086681,35.258198],"type":"Point"}')
+            )
+        )
+
+      _outside =
+        feature_fixture(
+          geometry:
+            Geo.JSON.decode(
+              Jason.decode!('{"coordinates":[-119.085197,35.260685],"type":"Point"}')
+            )
+        )
+
+      conn = get(conn, ~p"/api/features?ne=#{ne}&sw=#{sw}")
+
+      assert json_response(conn, 200)["data"]
+             |> Enum.map(fn %{"geometry" => g} -> Geo.JSON.decode!(g) end) == [inside.geometry]
+    end
   end
 
   describe "create feature" do

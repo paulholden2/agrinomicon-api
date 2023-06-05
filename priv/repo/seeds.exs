@@ -55,7 +55,6 @@ Agrinomicon.Repo.insert!(%Agrinomicon.Taxonomy.Classification{
   common_names: ["almond"]
 })
 
-organization =
-  Agrinomicon.Repo.insert!(%Agrinomicon.Agency.Organization{
-    name: "ACME Growers, Inc."
-  })
+Agrinomicon.Repo.insert!(%Agrinomicon.Agency.Organization{
+  name: "ACME Growers, Inc."
+})

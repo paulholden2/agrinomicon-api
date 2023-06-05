@@ -2,11 +2,15 @@ defmodule AgrinomiconWeb.BlockControllerTest do
   use AgrinomiconWeb.ConnCase
 
   import Agrinomicon.AgencyFixtures
+  import Agrinomicon.GeometryFixtures
 
   alias Agrinomicon.Agency.Block
 
   @create_attrs %{
-    name: "some name"
+    name: "some name",
+    feature: %{
+      geometry: geometry_fixture()
+    }
   }
   @update_attrs %{
     name: "some updated name"
@@ -33,7 +37,8 @@ defmodule AgrinomiconWeb.BlockControllerTest do
 
       assert %{
                "id" => ^id,
-               "name" => "some name"
+               "name" => "some name",
+               "feature_id" => _feature_id
              } = json_response(conn, 200)["data"]
     end
 

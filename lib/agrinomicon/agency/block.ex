@@ -16,5 +16,6 @@ defmodule Agrinomicon.Agency.Block do
   def changeset(block, attrs) do
     block
     |> cast(attrs, [:name])
+    |> cast_assoc(:feature)
   end
 end
