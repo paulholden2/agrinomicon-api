@@ -17,5 +17,6 @@ defmodule Agrinomicon.Agency.Block do
     block
     |> cast(attrs, [:name, :feature_id])
     |> cast_assoc(:feature)
+    |> unique_constraint(:feature_id)
   end
 end
