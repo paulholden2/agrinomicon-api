@@ -41,6 +41,17 @@ defmodule AgrinomiconWeb.Graphql.Schema do
     end)
   end
 
+  scalar :json do
+    parse fn input ->
+      case Jason.decode(input.value) do
+        {:ok, result} -> result
+        _ -> :error
+      end
+    end
+
+    serialize fn value -> value end
+  end
+
   @desc "A taxonomy classification"
   object :classification do
     field :id, :id
@@ -72,6 +83,8 @@ defmodule AgrinomiconWeb.Graphql.Schema do
     field :id, :id
     @desc "Geographic shape data as GeoJSON."
     field :geometry, :geojson
+    @desc "Properties associated with this feature."
+    field :properties, :json
   end
 
   @desc "An organization."
