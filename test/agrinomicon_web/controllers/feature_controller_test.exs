@@ -30,8 +30,8 @@ defmodule AgrinomiconWeb.FeatureControllerTest do
     end
 
     test "lists features within bounding box", %{conn: conn} do
-      ne = "-119.083496 35.259802"
-      sw = "-119.089804 35.256431"
+      nw = "-119.089804 35.259802"
+      se = "-119.083496 35.256431"
 
       inside =
         feature_fixture(
@@ -49,7 +49,7 @@ defmodule AgrinomiconWeb.FeatureControllerTest do
             )
         )
 
-      conn = get(conn, ~p"/api/features?ne=#{ne}&sw=#{sw}")
+      conn = get(conn, ~p"/api/features?nw=#{nw}&se=#{se}")
 
       assert json_response(conn, 200)["data"]
              |> Enum.map(fn %{"geometry" => g} -> Geo.JSON.decode!(g) end) == [inside.geometry]
