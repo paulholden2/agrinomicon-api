@@ -125,22 +125,17 @@ defmodule Agrinomicon.Production do
 
       iex> list_distributions()
       [%Distribution{}, ...]
+      iex> list_distributions(%{"tenure_id" => "009a6407-8721-452d-aea3-c0574f335c57"})
+      [%Distribution{}, ...]
 
   """
+  def list_distributions(), do: list_distributions(%{})
+
   def list_distributions(%{"tenure_id" => tenure_id}) do
     query = from d in Distribution, where: d.tenure_id == ^tenure_id
     Repo.all(query)
   end
 
-  @doc """
-  Returns the list of distributions.
-
-  ## Examples
-
-      iex> list_distributions()
-      [%Distribution{}, ...]
-
-  """
   def list_distributions(_) do
     Repo.all(Distribution)
   end
