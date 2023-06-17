@@ -17,9 +17,10 @@ defmodule AgrinomiconWeb.FeatureGEOJSON do
 
   defp data(%Feature{} = feature) do
     %{
+      id: feature.id,
       type: "Feature",
       geometry: feature.geometry,
-      properties: (feature.properties || %{}) |> Map.put(:id, feature.id)
+      properties: feature.properties
     }
   end
 end

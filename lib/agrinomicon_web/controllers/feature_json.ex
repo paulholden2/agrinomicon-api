@@ -18,6 +18,7 @@ defmodule AgrinomiconWeb.FeatureJSON do
   defp data(%Feature{} = feature) do
     %{
       id: feature.id,
+      type: "features",
       geometry: feature.geometry,
       properties: feature.properties || %{}
     }

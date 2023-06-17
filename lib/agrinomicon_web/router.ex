@@ -21,6 +21,8 @@ defmodule AgrinomiconWeb.Router do
     resources "/blocks", BlockController
     resources "/users", UserController
     resources "/sessions", SessionController, only: [:create, :delete]
+    resources "/tenures", TenureController
+    resources "/distributions", DistributionController
   end
 
   scope "/graphql" do

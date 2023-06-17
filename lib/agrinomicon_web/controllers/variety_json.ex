@@ -31,6 +31,7 @@ defmodule AgrinomiconWeb.VarietyJSON do
 
     %{
       id: variety.id,
+      type: "varieties",
       denomination: variety.denomination,
       classification: classification
     }

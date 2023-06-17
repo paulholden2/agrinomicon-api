@@ -18,6 +18,7 @@ defmodule AgrinomiconWeb.SessionJSON do
   defp data(%Session{} = session) do
     %{
       id: session.id,
+      type: "sessions",
       token: session.token
     }
   end

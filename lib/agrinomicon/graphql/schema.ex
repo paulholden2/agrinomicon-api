@@ -11,6 +11,7 @@ defmodule AgrinomiconWeb.Graphql.Schema do
       |> Dataloader.add_source(Agrinomicon.Taxonomy, Agrinomicon.Taxonomy.datasource())
       |> Dataloader.add_source(Agrinomicon.Gis, Agrinomicon.Gis.datasource())
       |> Dataloader.add_source(Agrinomicon.Agency, Agrinomicon.Agency.datasource())
+      |> Dataloader.add_source(Agrinomicon.Production, Agrinomicon.Production.datasource())
 
     Map.put(ctx, :loader, loader)
   end
@@ -105,6 +106,24 @@ defmodule AgrinomiconWeb.Graphql.Schema do
     field :organization, :organization, resolve: dataloader(Agrinomicon.Agency)
   end
 
+  @desc "The occupation of a block for the purposes of production."
+  object :tenure do
+    field :id, :id
+    @desc "The distributions of occupants for this Tenure."
+    field :distributions, list_of(:distribution), resolve: dataloader(Agrinomicon.Production)
+  end
+
+  @desc "Represents an occuptant of a Tenure, i.e. a crop or livestock."
+  object :distribution do
+    field :id, :id
+    @desc "The variety of the occupant."
+    field :variety, :variety, resolve: dataloader(Agrinomicon.Taxonomy)
+    @desc "The classification of hte occupant."
+    field :classification, :classification, resolve: dataloader(Agrinomicon.Taxonomy)
+    @desc "The coverage percent of the occupant."
+    field :coverage, :float
+  end
+
   query do
     @desc "Retrieve a list of classifications."
     field :classifications, list_of(:classification) do
@@ -124,6 +143,18 @@ defmodule AgrinomiconWeb.Graphql.Schema do
     @desc "Retrieve a list of blocks."
     field :blocks, list_of(:block) do
       resolve(&Resolvers.Block.list_blocks/3)
+    end
+
+    @desc "Retrieve a block by ID."
+    field :block, :block do
+      @desc "The block ID."
+      arg :id, non_null(:id)
+      resolve(&Resolvers.Block.get_block/3)
+    end
+
+    @desc "Retrieve a list of tenures."
+    field :tenures, list_of(:tenure) do
+      resolve(&Resolvers.Tenure.list_tenures/3)
     end
 
     @desc "Retrieve a list of features."

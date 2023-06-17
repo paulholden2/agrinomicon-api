@@ -134,6 +134,22 @@ defmodule Agrinomicon.Agency do
   @doc """
   Gets a single block.
 
+  Returns `nil` if block is not found
+
+  ## Examples
+
+      iex> get_block(123)
+      %Block{}
+
+      iex> get_block(456)
+      :error
+
+  """
+  def get_block(id), do: Repo.get(Block, id)
+
+  @doc """
+  Gets a single block.
+
   Raises `Ecto.NoResultsError` if the Block does not exist.
 
   ## Examples

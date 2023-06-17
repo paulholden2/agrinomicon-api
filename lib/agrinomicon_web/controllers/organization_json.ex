@@ -18,6 +18,7 @@ defmodule AgrinomiconWeb.OrganizationJSON do
   defp data(%Organization{} = organization) do
     %{
       id: organization.id,
+      type: "organizations",
       name: organization.name
     }
   end

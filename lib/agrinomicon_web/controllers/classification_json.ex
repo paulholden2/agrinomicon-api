@@ -18,6 +18,7 @@ defmodule AgrinomiconWeb.ClassificationJSON do
   defp data(%Classification{} = classification) do
     %{
       id: classification.id,
+      type: "classifications",
       kingdom: classification.kingdom,
       genus: classification.genus,
       species: classification.species,

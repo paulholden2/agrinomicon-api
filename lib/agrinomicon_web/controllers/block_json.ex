@@ -18,6 +18,7 @@ defmodule AgrinomiconWeb.BlockJSON do
   defp data(%Block{} = block) do
     %{
       id: block.id,
+      type: "blocks",
       name: block.name,
       feature_id: block.feature_id
     }
