@@ -67,6 +67,46 @@ defmodule Agrinomicon.Taxonomy do
   end
 
   @doc """
+  Gets a single classification by binomial name (case sensitive).
+
+  Raises `Ecto.NoResultsError` if the Classification does not exist.
+
+  ## Examples
+
+      iex> get_classification_by_binomial_name!("Vitis vinifera")
+      %Classification{}
+
+      iex> get_classification_by_binomial_name!("Homo neanderthalensis")
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_classification_by_binomial_name!(binomial_name) do
+    Repo.get_by!(Classification, binomial_name: binomial_name)
+  rescue
+    Ecto.Query.CastError -> nil
+  end
+
+  @doc """
+  Gets a single classification by its assigned USDA CDL value. Values range from 1-255.
+
+  Returns `nil` if no such Classification was found.
+
+  ## Examples
+
+      iex> get_classification_by_cdl_value(1)
+      %Classification{}
+
+      iex> get_classification_by_cdl_value(0)
+      nil
+
+  """
+  def get_classification_by_cdl_value(cdl_value) when is_integer(cdl_value),
+    do: get_classification_by_cdl_value(to_string(cdl_value))
+
+  def get_classification_by_cdl_value(cdl_value),
+    do: Repo.get_by(Classification, cdl_value: cdl_value)
+
+  @doc """
   Creates a classification.
 
   ## Examples

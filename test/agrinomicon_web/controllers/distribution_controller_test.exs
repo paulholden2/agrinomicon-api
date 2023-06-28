@@ -28,7 +28,11 @@ defmodule AgrinomiconWeb.DistributionControllerTest do
 
   describe "create distribution" do
     test "renders distribution when data is valid", %{conn: conn} do
-      conn = post(conn, ~p"/api/distributions", distribution: @create_attrs |> Map.put(:tenure_id, tenure_fixture().id))
+      conn =
+        post(conn, ~p"/api/distributions",
+          distribution: @create_attrs |> Map.put(:tenure_id, tenure_fixture().id)
+        )
+
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
       conn = get(conn, ~p"/api/distributions/#{id}")
@@ -48,8 +52,15 @@ defmodule AgrinomiconWeb.DistributionControllerTest do
   describe "update distribution" do
     setup [:create_distribution]
 
-    test "renders distribution when data is valid", %{conn: conn, distribution: %Distribution{id: id} = distribution} do
-      conn = put(conn, ~p"/api/distributions/#{distribution}", distribution: @update_attrs |> Map.put(:tenure_id, tenure_fixture().id))
+    test "renders distribution when data is valid", %{
+      conn: conn,
+      distribution: %Distribution{id: id} = distribution
+    } do
+      conn =
+        put(conn, ~p"/api/distributions/#{distribution}",
+          distribution: @update_attrs |> Map.put(:tenure_id, tenure_fixture().id)
+        )
+
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
       conn = get(conn, ~p"/api/distributions/#{id}")

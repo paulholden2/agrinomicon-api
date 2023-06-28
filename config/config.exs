@@ -50,3 +50,8 @@ config :geo_postgis,
 config :mime, :types, %{
   "application/geo+json" => ["geojson"]
 }
+
+config :agrinomicon, Oban,
+  repo: Agrinomicon.Repo,
+  plugins: [Oban.Plugins.Pruner],
+  queues: [default: 10]

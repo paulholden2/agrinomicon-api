@@ -11,8 +11,7 @@ defmodule Agrinomicon.ProductionFixtures do
     {:ok, tenure} =
       attrs
       |> Enum.into(%{
-        occupied_at: ~U[2023-06-10 21:51:00Z],
-        released_at: ~U[2023-06-10 21:51:00Z]
+        occupied_at: ~U[2023-06-10 21:51:00Z]
       })
       |> Agrinomicon.Production.create_tenure()
 
@@ -24,6 +23,7 @@ defmodule Agrinomicon.ProductionFixtures do
   """
   def distribution_fixture(attrs \\ %{}) do
     tenure = tenure_fixture()
+
     {:ok, distribution} =
       attrs
       |> Enum.into(%{

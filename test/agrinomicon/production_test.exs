@@ -21,11 +21,12 @@ defmodule Agrinomicon.ProductionTest do
     end
 
     test "create_tenure/1 with valid data creates a tenure" do
-      valid_attrs = %{occupied_at: ~U[2023-06-10 21:51:00Z], released_at: ~U[2023-06-10 21:51:00Z]}
+      valid_attrs = %{
+        occupied_at: ~U[2023-06-10 21:51:00Z]
+      }
 
       assert {:ok, %Tenure{} = tenure} = Production.create_tenure(valid_attrs)
       assert tenure.occupied_at == ~U[2023-06-10 21:51:00Z]
-      assert tenure.released_at == ~U[2023-06-10 21:51:00Z]
     end
 
     @tag :skip
@@ -35,11 +36,13 @@ defmodule Agrinomicon.ProductionTest do
 
     test "update_tenure/2 with valid data updates the tenure" do
       tenure = tenure_fixture()
-      update_attrs = %{occupied_at: ~U[2023-06-11 21:51:00Z], released_at: ~U[2023-06-11 21:51:00Z]}
+
+      update_attrs = %{
+        occupied_at: ~U[2023-06-11 21:51:00Z]
+      }
 
       assert {:ok, %Tenure{} = tenure} = Production.update_tenure(tenure, update_attrs)
       assert tenure.occupied_at == ~U[2023-06-11 21:51:00Z]
-      assert tenure.released_at == ~U[2023-06-11 21:51:00Z]
     end
 
     @tag :skip
@@ -93,13 +96,18 @@ defmodule Agrinomicon.ProductionTest do
       distribution = distribution_fixture()
       update_attrs = %{coverage: 46.7}
 
-      assert {:ok, %Distribution{} = distribution} = Production.update_distribution(distribution, update_attrs)
+      assert {:ok, %Distribution{} = distribution} =
+               Production.update_distribution(distribution, update_attrs)
+
       assert distribution.coverage == 46.7
     end
 
     test "update_distribution/2 with invalid data returns error changeset" do
       distribution = distribution_fixture()
-      assert {:error, %Ecto.Changeset{}} = Production.update_distribution(distribution, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Production.update_distribution(distribution, @invalid_attrs)
+
       assert distribution == Production.get_distribution!(distribution.id)
     end
 

@@ -1,5 +1,6 @@
 defmodule AgrinomiconWeb.BlockControllerTest do
   use AgrinomiconWeb.ConnCase
+  use Oban.Testing, repo: Agrinomicon.Repo
 
   import Agrinomicon.AgencyFixtures
   import Agrinomicon.GeometryFixtures
@@ -30,16 +31,19 @@ defmodule AgrinomiconWeb.BlockControllerTest do
 
   describe "create block" do
     test "renders block when data is valid", %{conn: conn} do
-      conn = post(conn, ~p"/api/blocks", block: @create_attrs)
-      assert %{"id" => id} = json_response(conn, 201)["data"]
+      Oban.Testing.with_testing_mode(:manual, fn ->
+        conn = post(conn, ~p"/api/blocks", block: @create_attrs)
+        assert %{"id" => id} = json_response(conn, 201)["data"]
+        assert_enqueued worker: Usda.Cdl, args: %{block_id: id}
 
-      conn = get(conn, ~p"/api/blocks/#{id}")
+        conn = get(conn, ~p"/api/blocks/#{id}")
 
-      assert %{
-               "id" => ^id,
-               "name" => "some name",
-               "feature_id" => _feature_id
-             } = json_response(conn, 200)["data"]
+        assert %{
+                 "id" => ^id,
+                 "name" => "some name",
+                 "feature_id" => _feature_id
+               } = json_response(conn, 200)["data"]
+      end)
     end
 
     @tag :skip
@@ -53,15 +57,18 @@ defmodule AgrinomiconWeb.BlockControllerTest do
     setup [:create_block]
 
     test "renders block when data is valid", %{conn: conn, block: %Block{id: id} = block} do
-      conn = put(conn, ~p"/api/blocks/#{block}", block: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+      Oban.Testing.with_testing_mode(:manual, fn ->
+        conn = put(conn, ~p"/api/blocks/#{block}", block: @update_attrs)
+        assert %{"id" => ^id} = json_response(conn, 200)["data"]
+        assert_enqueued worker: Usda.Cdl, args: %{block_id: id}
 
-      conn = get(conn, ~p"/api/blocks/#{id}")
+        conn = get(conn, ~p"/api/blocks/#{id}")
 
-      assert %{
-               "id" => ^id,
-               "name" => "some updated name"
-             } = json_response(conn, 200)["data"]
+        assert %{
+                 "id" => ^id,
+                 "name" => "some updated name"
+               } = json_response(conn, 200)["data"]
+      end)
     end
 
     @tag :skip

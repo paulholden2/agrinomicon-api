@@ -6,9 +6,8 @@ defmodule Agrinomicon.Production.Tenure do
   @foreign_key_type :binary_id
   schema "tenures" do
     field :occupied_at, :utc_datetime
-    field :released_at, :utc_datetime
     belongs_to :block, Agrinomicon.Agency.Block
-    has_many :distributions, Agrinomicon.Production.Distribution
+    has_many :distributions, Agrinomicon.Production.Distribution, on_replace: :delete
 
     timestamps()
   end
@@ -16,7 +15,7 @@ defmodule Agrinomicon.Production.Tenure do
   @doc false
   def changeset(tenure, attrs) do
     tenure
-    |> cast(attrs, [:occupied_at, :released_at, :block_id])
+    |> cast(attrs, [:occupied_at, :block_id])
     |> cast_assoc(:block)
     |> cast_assoc(:distributions, with: &Agrinomicon.Production.Distribution.changeset/2)
   end

@@ -24,7 +24,9 @@ defmodule AgrinomiconWeb.ClassificationJSON do
       species: classification.species,
       binomial_name: classification.binomial_name,
       aliases: classification.aliases,
-      common_names: classification.common_names
+      common_names: classification.common_names,
+      cdl_value: classification.cdl_value,
+      geometry_color: classification.geometry_color
     }
   end
 end

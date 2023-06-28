@@ -8,6 +8,7 @@ defmodule Agrinomicon.Agency.Block do
     field :name, :string
     belongs_to :organization, Agrinomicon.Agency.Organization
     belongs_to :feature, Agrinomicon.Gis.Feature
+    has_many :tenures, Agrinomicon.Production.Tenure, on_replace: :delete
 
     timestamps()
   end
@@ -17,6 +18,7 @@ defmodule Agrinomicon.Agency.Block do
     block
     |> cast(attrs, [:name, :feature_id])
     |> cast_assoc(:feature)
+    |> cast_assoc(:tenures, with: &Agrinomicon.Production.Tenure.changeset/2)
     |> unique_constraint(:feature_id)
   end
 end

@@ -12,7 +12,8 @@ defmodule AgrinomiconWeb.DistributionController do
   end
 
   def create(conn, %{"distribution" => distribution_params}) do
-    with {:ok, %Distribution{} = distribution} <- Production.create_distribution(distribution_params) do
+    with {:ok, %Distribution{} = distribution} <-
+           Production.create_distribution(distribution_params) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", ~p"/api/distributions/#{distribution}")
@@ -28,7 +29,8 @@ defmodule AgrinomiconWeb.DistributionController do
   def update(conn, %{"id" => id, "distribution" => distribution_params}) do
     distribution = Production.get_distribution!(id)
 
-    with {:ok, %Distribution{} = distribution} <- Production.update_distribution(distribution, distribution_params) do
+    with {:ok, %Distribution{} = distribution} <-
+           Production.update_distribution(distribution, distribution_params) do
       render(conn, :show, distribution: distribution)
     end
   end

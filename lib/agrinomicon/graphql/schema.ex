@@ -43,14 +43,30 @@ defmodule AgrinomiconWeb.Graphql.Schema do
   end
 
   scalar :json do
-    parse fn input ->
+    parse(fn input ->
       case Jason.decode(input.value) do
         {:ok, result} -> result
         _ -> :error
       end
-    end
+    end)
 
-    serialize fn value -> value end
+    serialize(fn value -> value end)
+  end
+
+  scalar :map do
+    parse(fn input -> input end)
+    serialize(fn value -> value end)
+  end
+
+  @desc """
+  The `DateTime` scalar type represents a date and time in the UTC
+  timezone. The DateTime appears in a JSON response as an ISO8601 formatted
+  string, including UTC timezone ("Z"). The parsed date and time string will
+  be converted to UTC and any UTC offset other than 0 will be rejected.
+  """
+  scalar :datetime, name: "DateTime" do
+    serialize(&DateTime.to_iso8601/1)
+    parse(&parse_datetime/1)
   end
 
   @desc "A taxonomy classification"
@@ -68,6 +84,8 @@ defmodule AgrinomiconWeb.Graphql.Schema do
     field :common_names, list_of(:string)
     @desc "Aliases, or synonymous binomial names for this species."
     field :aliases, list_of(:string)
+    @desc "Color to display geometry for this classification."
+    field :geometry_color, :string
   end
 
   @desc "A species variety."
@@ -104,6 +122,13 @@ defmodule AgrinomiconWeb.Graphql.Schema do
     field :feature, :feature, resolve: dataloader(Agrinomicon.Gis)
     @desc "The Organization that owns the land described by the block's Feature."
     field :organization, :organization, resolve: dataloader(Agrinomicon.Agency)
+    @desc "The Tenures associated with this block."
+    field :tenures, list_of(:tenure) do
+      arg(:sort_by, non_null(:string), default_value: "occupied_at")
+      arg(:sort_dir, non_null(:string), default_value: "asc")
+      arg(:limit, :integer)
+      resolve(dataloader(Agrinomicon.Production))
+    end
   end
 
   @desc "The occupation of a block for the purposes of production."
@@ -111,6 +136,10 @@ defmodule AgrinomiconWeb.Graphql.Schema do
     field :id, :id
     @desc "The distributions of occupants for this Tenure."
     field :distributions, list_of(:distribution), resolve: dataloader(Agrinomicon.Production)
+    @desc "The start date and time of the Tenure."
+    field :occupied_at, :datetime
+    @desc "The associated block."
+    field :block, :block, resolve: dataloader(Agrinomicon.Agency)
   end
 
   @desc "Represents an occuptant of a Tenure, i.e. a crop or livestock."
@@ -148,12 +177,20 @@ defmodule AgrinomiconWeb.Graphql.Schema do
     @desc "Retrieve a block by ID."
     field :block, :block do
       @desc "The block ID."
-      arg :id, non_null(:id)
+      arg(:id, non_null(:id))
       resolve(&Resolvers.Block.get_block/3)
     end
 
     @desc "Retrieve a list of tenures."
     field :tenures, list_of(:tenure) do
+      @desc 'The column by which to sort. Allowed values are: `"occupied_at"`. Defaults to `"occupied_at"`.'
+      arg(:sort_by, non_null(:string), default_value: "occupied_at")
+
+      @desc 'The direction to sort results. Allowed values are: `"asc"`, `"desc"`. Defaults to `"asc"`.'
+      arg(:sort_dir, non_null(:string), default_value: "asc")
+
+      @desc 'The number of results to return. Allowed values are any integers greater than zero, or `nil`'
+      arg(:limit, :integer)
       resolve(&Resolvers.Tenure.list_tenures/3)
     end
 
@@ -162,4 +199,17 @@ defmodule AgrinomiconWeb.Graphql.Schema do
       resolve(&Resolvers.Feature.list_features/3)
     end
   end
+
+  @spec parse_datetime(Absinthe.Blueprint.Input.String.t()) :: {:ok, DateTime.t()} | :error
+  @spec parse_datetime(Absinthe.Blueprint.Input.Null.t()) :: {:ok, nil}
+  defp parse_datetime(%Absinthe.Blueprint.Input.String{value: value}) do
+    case DateTime.from_iso8601(value) do
+      {:ok, datetime, 0} -> {:ok, datetime}
+      {:ok, _datetime, _offset} -> :error
+      _error -> :error
+    end
+  end
+
+  defp parse_datetime(%Absinthe.Blueprint.Input.Null{}), do: {:ok, nil}
+  defp parse_datetime(_), do: :error
 end

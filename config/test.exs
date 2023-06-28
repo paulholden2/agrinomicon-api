@@ -37,3 +37,5 @@ config :phoenix, :plug_init_mode, :runtime
 config :agrinomicon, Agrinomicon.Guardian,
   issuer: "agrinomicon",
   secret_key: "not_a_secret"
+
+config :agrinomicon, Oban, testing: :inline

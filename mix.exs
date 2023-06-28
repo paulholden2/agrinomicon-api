@@ -49,7 +49,8 @@ defmodule Agrinomicon.MixProject do
       {:corsica, "~> 1.0"},
       {:guardian, "~> 2.3"},
       {:bcrypt_elixir, "~> 3.0"},
-      {:bodyguard, "~> 2.4"}
+      {:bodyguard, "~> 2.4"},
+      {:oban, "~> 2.14"}
     ]
   end
 

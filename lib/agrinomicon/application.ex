@@ -17,9 +17,10 @@ defmodule Agrinomicon.Application do
       # Start Finch
       {Finch, name: Agrinomicon.Finch},
       # Start the Endpoint (http/https)
-      AgrinomiconWeb.Endpoint
+      AgrinomiconWeb.Endpoint,
       # Start a worker by calling: Agrinomicon.Worker.start_link(arg)
       # {Agrinomicon.Worker, arg}
+      {Oban, Application.fetch_env!(:agrinomicon, Oban)}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

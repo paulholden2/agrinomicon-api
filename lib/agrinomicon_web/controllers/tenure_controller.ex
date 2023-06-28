@@ -26,7 +26,7 @@ defmodule AgrinomiconWeb.TenureController do
   end
 
   def update(conn, %{"id" => id, "tenure" => tenure_params}) do
-    tenure = Production.get_tenure!(id)
+    tenure = Production.get_tenure!(id, preloads: :distributions)
 
     with {:ok, %Tenure{} = tenure} <- Production.update_tenure(tenure, tenure_params) do
       render(conn, :show, tenure: tenure)

@@ -18,9 +18,17 @@ defmodule Agrinomicon.Production do
   @doc """
   Query function for the `Production` Dataloader.
   """
-  def query(queryable, _params) do
+  def query(queryable, %{sort_dir: sort_dir, sort_by: sort_by, limit: limit}) do
+    order_by_param = [
+      "#{sort_dir}": String.to_atom(sort_by)
+    ]
+
     queryable
+    |> order_by(^order_by_param)
+    |> limit(^limit)
   end
+
+  def query(queryable, _params), do: queryable
 
   @doc """
   Returns the list of tenures.
@@ -50,6 +58,8 @@ defmodule Agrinomicon.Production do
 
   """
   def get_tenure!(id), do: Repo.get!(Tenure, id)
+
+  def get_tenure!(id, preloads: preloads), do: Repo.get!(Tenure, id) |> Repo.preload(preloads)
 
   @doc """
   Creates a tenure.

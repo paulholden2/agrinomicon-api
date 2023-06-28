@@ -90,7 +90,7 @@ defmodule AgrinomiconWeb.ClassificationControllerTest do
                "kingdom" => "plantae",
                "species" => "some updated species",
                "aliases" => nil,
-               "common_names" => nil
+               "common_names" => ["some common name"]
              } = json_response(conn, 200)["data"]
     end
 

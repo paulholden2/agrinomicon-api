@@ -6,6 +6,11 @@ defmodule AgrinomiconWeb.ClassificationController do
 
   action_fallback AgrinomiconWeb.FallbackController
 
+  def index(conn, %{"binomial_name" => binomial_name}) do
+    classification = Taxonomy.get_classification_by_binomial_name!(binomial_name)
+    render(conn, :index, classifications: [classification])
+  end
+
   def index(conn, _params) do
     with :ok <-
            Bodyguard.permit(Taxonomy.Policy, :list_classifications, conn.assigns[:current_user]) do

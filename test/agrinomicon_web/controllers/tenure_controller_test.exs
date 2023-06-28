@@ -6,12 +6,10 @@ defmodule AgrinomiconWeb.TenureControllerTest do
   alias Agrinomicon.Production.Tenure
 
   @create_attrs %{
-    occupied_at: ~U[2023-06-10 21:51:00Z],
-    released_at: ~U[2023-06-10 21:51:00Z]
+    occupied_at: ~U[2023-06-10 21:51:00Z]
   }
   @update_attrs %{
-    occupied_at: ~U[2023-06-11 21:51:00Z],
-    released_at: ~U[2023-06-11 21:51:00Z]
+    occupied_at: ~U[2023-06-11 21:51:00Z]
   }
   @invalid_attrs %{}
 
@@ -35,8 +33,7 @@ defmodule AgrinomiconWeb.TenureControllerTest do
 
       assert %{
                "id" => ^id,
-               "occupied_at" => "2023-06-10T21:51:00Z",
-               "released_at" => "2023-06-10T21:51:00Z"
+               "occupied_at" => "2023-06-10T21:51:00Z"
              } = json_response(conn, 200)["data"]
     end
 
@@ -58,8 +55,7 @@ defmodule AgrinomiconWeb.TenureControllerTest do
 
       assert %{
                "id" => ^id,
-               "occupied_at" => "2023-06-11T21:51:00Z",
-               "released_at" => "2023-06-11T21:51:00Z"
+               "occupied_at" => "2023-06-11T21:51:00Z"
              } = json_response(conn, 200)["data"]
     end
 

@@ -132,7 +132,7 @@ defmodule Agrinomicon.Agency do
   end
 
   @doc """
-  Gets a single block.
+  Gets a single block, optionally with preloaded associations.
 
   Returns `nil` if block is not found
 
@@ -141,11 +141,16 @@ defmodule Agrinomicon.Agency do
       iex> get_block(123)
       %Block{}
 
+      iex> get_block(123, preloads: :feature)
+      %Block{}
+
       iex> get_block(456)
       :error
 
   """
   def get_block(id), do: Repo.get(Block, id)
+
+  def get_block(id, preloads: preloads), do: Repo.get(Block, id) |> Repo.preload(preloads)
 
   @doc """
   Gets a single block.
@@ -157,11 +162,16 @@ defmodule Agrinomicon.Agency do
       iex> get_block!(123)
       %Block{}
 
+      iex> get_block!(123, preloads: :feature)
+      %Block{}
+
       iex> get_block!(456)
       ** (Ecto.NoResultsError)
 
   """
   def get_block!(id), do: Repo.get!(Block, id)
+
+  def get_block!(id, preloads: preloads), do: Repo.get!(Block, id) |> Repo.preload(preloads)
 
   @doc """
   Creates a block.

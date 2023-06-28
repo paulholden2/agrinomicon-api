@@ -20,7 +20,7 @@ defmodule AgrinomiconWeb.TenureJSON do
       id: tenure.id,
       type: "tenures",
       occupied_at: tenure.occupied_at,
-      released_at: tenure.released_at
+      block_id: tenure.block_id
     }
   end
 end
