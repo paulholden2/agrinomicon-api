@@ -32,8 +32,10 @@ defmodule AgrinomiconWeb.BlockController do
     block = Agency.get_block!(id, preloads: [:feature, tenures: :distributions])
 
     with {:ok, %Block{} = block} <- Agency.update_block(block, block_params) do
-      Usda.Cdl.new(%{"block_id" => block.id})
-      |> Oban.insert()
+      if "geometry" in block_params do
+        Usda.Cdl.new(%{"block_id" => block.id})
+        |> Oban.insert()
+      end
 
       render(conn, :show, block: block)
     end
