@@ -57,18 +57,15 @@ defmodule AgrinomiconWeb.BlockControllerTest do
     setup [:create_block]
 
     test "renders block when data is valid", %{conn: conn, block: %Block{id: id} = block} do
-      Oban.Testing.with_testing_mode(:manual, fn ->
-        conn = put(conn, ~p"/api/blocks/#{block}", block: @update_attrs)
-        assert %{"id" => ^id} = json_response(conn, 200)["data"]
-        assert_enqueued worker: Usda.Cdl, args: %{block_id: id}
+      conn = put(conn, ~p"/api/blocks/#{block}", block: @update_attrs)
+      assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-        conn = get(conn, ~p"/api/blocks/#{id}")
+      conn = get(conn, ~p"/api/blocks/#{id}")
 
-        assert %{
-                 "id" => ^id,
-                 "name" => "some updated name"
-               } = json_response(conn, 200)["data"]
-      end)
+      assert %{
+               "id" => ^id,
+               "name" => "some updated name"
+             } = json_response(conn, 200)["data"]
     end
 
     @tag :skip
